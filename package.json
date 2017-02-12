@@ -4,14 +4,12 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.14.1",
     "jquery": "^3.1.1",
     "open": "0.0.5",
-    "path": "^0.12.7"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node js/express.js",
+    "start": "node js/start.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
