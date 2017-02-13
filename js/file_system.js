@@ -40,7 +40,7 @@ FileSystem.prototype.changeIsClose = function(fileId){
     for (let i = 0; i < file.items.length; i++){
         this.changeIsClose(file.items[i]);
     }
-    file.changeIsClose();
+    file.changeItToClose();
 };
 
 FileSystem.prototype.isDirectoryNameExist = function(directory, name){

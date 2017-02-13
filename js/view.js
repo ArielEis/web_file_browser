@@ -114,6 +114,7 @@ function initializeBrowser(){
     let folder = newNode.find('.folder');
     folder.attr('id', 'folder_0');
     folder.attr('index', 0);
+    folder.attr('state', 'close');
     addListenerClickToFolderIconOnBrowser(folder);
     let aTag = newNode.find('a');
     aTag.text(fileSystem.getRoot().name);
@@ -166,7 +167,9 @@ function initialContextMenuOptions(){
 
 
 function openDirectoryOnBrowser(directory){
-    browser.find('#folder_'+directory.id).attr('src', 'pics/open_directory.png');
+    var folderIcon =  browser.find('#folder_'+directory.id);
+    folderIcon.attr('src', 'pics/open_directory.png');
+    folderIcon.attr('state', 'open');
     let allDirectories = [];
     let allFiles = [];
     seperateFilesInsideDirectory(directory, allDirectories, allFiles);
@@ -178,15 +181,17 @@ function openDirectoryOnBrowser(directory){
 
 
 function closeDirectoryOnBrowser(directory){
-    browser.find('#folder_'+directory.id).attr('src', 'pics/close_directory.png');
+    var folderIcon =  browser.find('#folder_'+directory.id);
+    folderIcon.attr('src', 'pics/close_directory.png');
+    folderIcon.attr('state', 'close');
     for (let i = 0; i < directory.items.length; i++){
-        removeDirectoryFromBrowser(directory.items[i].id);
+        removeDirectoryFromBrowser(directory.items[i]);
     }
 }
 
 
-function removeDirectoryFromBrowser() {
-    browser.find('#ul_' + targetId).remove();
+function removeDirectoryFromBrowser(id) {
+    browser.find('#ul_' + id).remove();
 }
 
 
@@ -219,7 +224,7 @@ function openDirectory(directory, isHistoryRequest){
     seperateFilesInsideDirectory(directory, allDirectories, allFiles);
     allDirectories = mergeSort(allDirectories, 'fileName');
     allFiles = mergeSort(allFiles, 'fileName');
-    for (let i = 0; i < allDirectories.length; i++){
+    for (let i=0; i<allDirectories.length; i++){
         drawDirectoryOnContent(allDirectories[i].name, allDirectories[i].id);
     }
     for (let i = 0; i < allFiles.length; i++) {
@@ -372,7 +377,7 @@ function addDirectoryIntoHistoryLog(node){
 function createNewDirectory(name){
     checkTargetFromBrowserOrFromContent();
     fileSystem.addDirectoryToDirectory(targetId, name);
-    if (browser.find('#folder_'+targetId).attr('src') === 'pics/open_directory.png'){
+    if (browser.find('#folder_'+targetId).attr('state') === 'open'){
         drawDirectoryOnBrowser(name, (fileSystem.nextFileId-1), targetId);
     } else {
         openDirectoryOnBrowser(fileSystem.getFileById(targetId));
@@ -402,7 +407,7 @@ function deleteItemExecute() {
     let parent = fileSystem.getParentById(targetId);
     parent.removeItem(targetId);
     if (fileSystem.getFileById(targetId).isDirectory()){
-        removeDirectoryFromBrowser();
+        removeDirectoryFromBrowser(targetId);
     }
     if (targetId === currentLocationId){
         removeItemFromContent();
@@ -532,7 +537,7 @@ function addListenerClickToQuitContentMenu(){
 function addListenerClickToFolderIconOnBrowser(icon) {
     icon.click(function () {
         let currentDirectory = fileSystem.getFileById(parseInt($(this).attr('index')));
-        if ($(this).attr('src') === 'pics/close_directory.png'){
+        if ($(this).attr('state') === 'close'){
             openDirectoryOnBrowser(currentDirectory);
         } else {
             closeDirectoryOnBrowser(currentDirectory);
@@ -711,13 +716,13 @@ function createAlertMessage(message){
 /* General functions */
 
 function closeObject(objects, timer){
-    for(let i=0; i<objects.length; i++){
+    for(let i = 0; i <objects.length; i++){
         objects[i].fadeOut(timer);
     }
 }
 
 function openObject(objects, timer){
-    for(let i=0; i<objects.length; i++){
+    for(let i = 0; i <objects.length; i++){
         objects[i].fadeIn(timer);
     }
 }
