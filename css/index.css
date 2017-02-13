@@ -214,7 +214,7 @@ html, body{
     padding-bottom: 5px;
     position: absolute;
     display: none;
-    cursor: url('pics/blacke_mouse_icon.png'), auto;
+    cursor: url('../pics/blacke_mouse_icon.png'), auto;
 
 }
 
@@ -234,7 +234,7 @@ html, body{
     padding-bottom: 5px;
     position: fixed;
     display: none;
-    cursor: url('blacke_mouse_icon.png'), auto;
+    cursor: url('../pics/blacke_mouse_icon.png'), auto;
 
 }
 
@@ -262,19 +262,19 @@ html, body{
 
 
 #delete_file:hover .icon_menu {
-    content: url("icons/blue_delete_icon.png");
+    content: url("../icons/blue_delete_icon.png");
 }
 
 #rename_file:hover .icon_menu {
-    content: url("icons/blue_edit_icon.png");
+    content: url("../icons/blue_edit_icon.png");
 }
 
 #new_file:hover .icon_menu {
-    content: url("icons/blue_new_icon.png");
+    content: url("../icons/blue_new_icon.png");
 }
 
 .quit_menu:hover .icon_menu {
-    content: url("icons/blue_quit_icon.png");
+    content: url("../icons/blue_quit_icon.png");
 }
 
 
