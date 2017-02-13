@@ -37,14 +37,14 @@ FileSystem.prototype.getFileById = function (fileId) {
 
 FileSystem.prototype.changeIsClose = function(fileId){
     let file = this.allFiles[fileId];
-    for (let i=0; i<file.items.length; i++){
+    for (let i = 0; i < file.items.length; i++){
         this.changeIsClose(file.items[i]);
     }
-    file.changeItToClose();
+    file.changeIsClose();
 };
 
 FileSystem.prototype.isDirectoryNameExist = function(directory, name){
-    for (let i=0; i<directory.items.length; i++){
+    for (let i = 0; i < directory.items.length; i++){
         if (this.allFiles[directory.items[i]].name === name &&
                 this.allFiles[directory.items[i]].type === 'directory'){
             return true;
@@ -54,7 +54,7 @@ FileSystem.prototype.isDirectoryNameExist = function(directory, name){
 };
 
 FileSystem.prototype.isFileNameExist = function(directory, name, type){
-    for (let i=0; i<directory.items.length; i++){
+    for (let i = 0; i < directory.items.length; i++){
         if (this.allFiles[directory.items[i]].name === name &&
                 this.allFiles[directory.items[i]].type === type){
             return true;
@@ -143,7 +143,7 @@ FileSystem.prototype.getFileByPath = function (pathString) {
 
 FileSystem.prototype.saveInLocalStorage = function () {
     let linearArray = [];
-    for (let i=0; i<this.allFiles.length; i++){
+    for (let i = 0; i < this.allFiles.length; i++){
         let file = this.allFiles[i];
         if (file !== undefined){
             linearArray.push({
@@ -165,7 +165,7 @@ FileSystem.prototype.buildIt = function () {
     this.getRoot().rename(linearArray[0].name);
     if (linearArray.length > 0){
         let parent = null;
-        for (let i=1; i<linearArray.length; i++){
+        for (let i = 1; i < linearArray.length; i++){
             parent = this.allFiles[linearArray[i].parentId];
             if (linearArray[i].type === 'directory'){
                 this.addDirectoryToDirectory(parent.id, linearArray[i].name);

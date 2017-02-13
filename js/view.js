@@ -171,7 +171,7 @@ function openDirectoryOnBrowser(directory){
     let allFiles = [];
     seperateFilesInsideDirectory(directory, allDirectories, allFiles);
     allDirectories = mergeSort(allDirectories, 'fileName');
-    for (let i=0; i<allDirectories.length; i++){
+    for (let i = 0; i < allDirectories.length; i++){
         drawDirectoryOnBrowser(allDirectories[i].name, allDirectories[i].id, directory.id);
     }
 }
@@ -179,8 +179,8 @@ function openDirectoryOnBrowser(directory){
 
 function closeDirectoryOnBrowser(directory){
     browser.find('#folder_'+directory.id).attr('src', 'pics/close_directory.png');
-    for (let i=0; i<directory.items.length; i++){
-        browser.find('#ul_' + directory.items[i]).remove();
+    for (let i = 0; i < directory.items.length; i++){
+        removeDirectoryFromBrowser(directory.items[i].id);
     }
 }
 
@@ -219,7 +219,7 @@ function openDirectory(directory, isHistoryRequest){
     seperateFilesInsideDirectory(directory, allDirectories, allFiles);
     allDirectories = mergeSort(allDirectories, 'fileName');
     allFiles = mergeSort(allFiles, 'fileName');
-    for (let i=0; i<allDirectories.length; i++){
+    for (let i = 0; i < allDirectories.length; i++){
         drawDirectoryOnContent(allDirectories[i].name, allDirectories[i].id);
     }
     for (let i = 0; i < allFiles.length; i++) {

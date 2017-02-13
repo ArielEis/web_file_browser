@@ -1,7 +1,7 @@
 "use strict";
 
 function seperateFilesInsideDirectory(directory, directories, files){
-    for (let i=0; i<directory.items.length; i++){
+    for (let i = 0; i < directory.items.length; i++){
         if (fileSystem.allFiles[directory.items[i]].isDirectory()){
             directories.push(fileSystem.allFiles[directory.items[i]]);
         } else {
