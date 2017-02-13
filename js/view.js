@@ -116,7 +116,7 @@ function initializeBrowser(){
     folder.attr('index', 0);
     addListenerClickToFolderIconOnBrowser(folder);
     let aTag = newNode.find('a');
-    aTag.text(fileSystem.getRoot()._name);
+    aTag.text(fileSystem.getRoot().name);
     aTag.attr('class', 'a_ul');
     aTag.attr('index', 0);
     aTag.attr('state', 'close');
@@ -166,21 +166,21 @@ function initialContextMenuOptions(){
 
 
 function openDirectoryOnBrowser(directory){
-    browser.find('#folder_'+directory._id).attr('src', 'pics/open_directory.png');
+    browser.find('#folder_'+directory.id).attr('src', 'pics/open_directory.png');
     let allDirectories = [];
     let allFiles = [];
     seperateFilesInsideDirectory(directory, allDirectories, allFiles);
     allDirectories = mergeSort(allDirectories, 'fileName');
     for (let i=0; i<allDirectories.length; i++){
-        drawDirectoryOnBrowser(allDirectories[i]._name, allDirectories[i]._id, directory._id);
+        drawDirectoryOnBrowser(allDirectories[i].name, allDirectories[i].id, directory.id);
     }
 }
 
 
 function closeDirectoryOnBrowser(directory){
-    browser.find('#folder_'+directory._id).attr('src', 'pics/close_directory.png');
-    for (let i=0; i<directory._items.length; i++){
-        browser.find('#ul_' + directory._items[i]).remove();
+    browser.find('#folder_'+directory.id).attr('src', 'pics/close_directory.png');
+    for (let i=0; i<directory.items.length; i++){
+        browser.find('#ul_' + directory.items[i]).remove();
     }
 }
 
@@ -213,17 +213,17 @@ function drawDirectoryOnBrowser(name, id, parentId){
 function openDirectory(directory, isHistoryRequest){
     content.css({'background-color':'snow'});
     content.empty();
-    currentLocationId = directory._id;
+    currentLocationId = directory.id;
     let allDirectories = [];
     let allFiles = [];
     seperateFilesInsideDirectory(directory, allDirectories, allFiles);
     allDirectories = mergeSort(allDirectories, 'fileName');
     allFiles = mergeSort(allFiles, 'fileName');
     for (let i=0; i<allDirectories.length; i++){
-        drawDirectoryOnContent(allDirectories[i]._name, allDirectories[i]._id);
+        drawDirectoryOnContent(allDirectories[i].name, allDirectories[i].id);
     }
     for (let i = 0; i < allFiles.length; i++) {
-        drawFileOnContent(allFiles[i]._name, allFiles[i]._id, allFiles[i]._type);
+        drawFileOnContent(allFiles[i].name, allFiles[i].id, allFiles[i].type);
     }
         updateAddressLine();
     if (!isHistoryRequest){
@@ -234,7 +234,7 @@ function openDirectory(directory, isHistoryRequest){
 
 
 function closeDirectory(directory){
-    currentLocationId = directory._parentId;
+    currentLocationId = directory.parentId;
     content.empty();
     content.css({'background-color':'#666'});
     address.val('');
@@ -245,9 +245,9 @@ function closeDirectory(directory){
 function showFileContent() {
     let window = openFileWindow.clone();
     let file = fileSystem.getFileById(targetId);
-    window.find('.file_title').text(file._name+".txt");
+    window.find('.file_title').text(file.name+".txt");
     let input = window.find('#file_content_text');
-    input.text(file._content);
+    input.text(file.content);
     window.find('#file_quit').click(function () {
         closeObject([window], 200);
     });
@@ -350,7 +350,7 @@ function enableButton(button){
 
 
 function addDirectoryIntoHistoryLog(node){
-    if (historyLog[historyPointer] !== node._id){
+    if (historyLog[historyPointer] !== node.id){
         if (historyPointer < (historyLog.length-1)){
             historyLog.splice(historyPointer+1);
         }
@@ -359,7 +359,7 @@ function addDirectoryIntoHistoryLog(node){
             historyLog.shift();
             historyPointer = historyLogMaxSize-1;
         }
-        historyLog.push(node._id);
+        historyLog.push(node.id);
         historyPointer++;
     }
     handleNavigationButtonsEnable();
@@ -373,12 +373,12 @@ function createNewDirectory(name){
     checkTargetFromBrowserOrFromContent();
     fileSystem.addDirectoryToDirectory(targetId, name);
     if (browser.find('#folder_'+targetId).attr('src') === 'pics/open_directory.png'){
-        drawDirectoryOnBrowser(name, (fileSystem._nextFileId-1), targetId);
+        drawDirectoryOnBrowser(name, (fileSystem.nextFileId-1), targetId);
     } else {
         openDirectoryOnBrowser(fileSystem.getFileById(targetId));
     }
     if (targetId === currentLocationId){
-        drawDirectoryOnContent(name, (fileSystem._nextFileId-1));
+        drawDirectoryOnContent(name, (fileSystem.nextFileId-1));
     }
     saveSystem();
 }
@@ -387,7 +387,7 @@ function createNewFile(name, type){
     checkTargetFromBrowserOrFromContent();
     fileSystem.addFileToDirectory(targetId, name, type, 'Empty-file');
     if (targetId === currentLocationId){
-        drawFileOnContent(name, (fileSystem._nextFileId-1), type);
+        drawFileOnContent(name, (fileSystem.nextFileId-1), type);
     }
     saveSystem();
 }
@@ -411,8 +411,8 @@ function deleteItemExecute() {
 
     content.find('#file_'+targetId).remove();
 
-    if (fileSystem._allFiles[currentLocationId] === undefined){
-        currentLocationId = parent._id;
+    if (fileSystem.allFiles[currentLocationId] === undefined){
+        currentLocationId = parent.id;
         content.empty();
         openDirectory(parent, false);
     }
@@ -422,8 +422,8 @@ function deleteItemExecute() {
 
 function renameItem(targetFile, name){
     targetFile.rename(name);
-    browser.find('#a_'+targetFile._id).text(name);
-    content.find('#file_'+targetFile._id).find(".file_name").text(name);
+    browser.find('#a_'+targetFile.id).text(name);
+    content.find('#file_'+targetFile.id).find(".file_name").text(name);
     updateAddressLine();
     saveSystem();
 }
@@ -435,7 +435,7 @@ function renameItem(targetFile, name){
 function setRightClickContextMenu(event){
     if (event.button === 2){
         checkTargetFromBrowserOrFromContent();
-        let title = setMaxLengthOfTitle15Characters(fileSystem.getFileById(targetId)._name);
+        let title = setMaxLengthOfTitle15Characters(fileSystem.getFileById(targetId).name);
         contentMenuTitle.text(title);
         contentMenu.css('left', event.pageX+5);
         contentMenu.css('top', event.pageY+5);
@@ -657,13 +657,13 @@ function setRenamePrompt() {
     let input = newPrompt.find('.prompt_text');
     checkTargetFromBrowserOrFromContent();
     let targetFile = fileSystem.getFileById(targetId);
-    setUpNewPrompt(newPrompt, 'Rename file:', targetFile._name,
+    setUpNewPrompt(newPrompt, 'Rename file:', targetFile.name,
         'Rename', input, confirm);
     confirm.click(function () {
         let message = [];
-        targetId = targetFile._parentId;
-        if (validateName(input.val(),message, targetFile._type, true)){
-            targetId = targetFile._id;
+        targetId = targetFile.parentId;
+        if (validateName(input.val(),message, targetFile.type, true)){
+            targetId = targetFile.id;
             closeObject([newPrompt], 1);
             renameItem(targetFile, input.val());
         } else {

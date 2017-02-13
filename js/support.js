@@ -1,11 +1,11 @@
 "use strict";
 
 function seperateFilesInsideDirectory(directory, directories, files){
-    for (let i=0; i<directory._items.length; i++){
-        if (fileSystem._allFiles[directory._items[i]].isDirectory()){
-            directories.push(fileSystem._allFiles[directory._items[i]]);
+    for (let i=0; i<directory.items.length; i++){
+        if (fileSystem.allFiles[directory.items[i]].isDirectory()){
+            directories.push(fileSystem.allFiles[directory.items[i]]);
         } else {
-            files.push(fileSystem._allFiles[directory._items[i]]);
+            files.push(fileSystem.allFiles[directory.items[i]]);
         }
     }
 }
@@ -37,10 +37,10 @@ function mergeName(left, right) {
     let indexRight = 0;
 
     while (indexLeft < left.length && indexRight < right.length) {
-        if (left[indexLeft]._name.toLowerCase() < right[indexRight]._name.toLowerCase()) {
+        if (left[indexLeft].name.toLowerCase() < right[indexRight].name.toLowerCase()) {
             result.push(left[indexLeft++]);
-        } else if (left[indexLeft]._name.toLowerCase() === right[indexRight]._name.toLowerCase()) {
-            if ((left[indexLeft]._type < right[indexRight]._type)) {
+        } else if (left[indexLeft].name.toLowerCase() === right[indexRight].name.toLowerCase()) {
+            if ((left[indexLeft].type < right[indexRight].type)) {
                 result.push(left[indexLeft++]);
             } else {
                 result.push(right[indexRight++]);
@@ -59,7 +59,7 @@ function mergeId(left, right) {
     let indexRight = 0;
 
     while (indexLeft < left.length && indexRight < right.length) {
-        if (left[indexLeft]._id < right[indexRight]._id) {
+        if (left[indexLeft].id < right[indexRight].id) {
             result.push(left[indexLeft++]);
         }else {
             result.push(right[indexRight++]);
