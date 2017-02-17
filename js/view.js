@@ -556,7 +556,7 @@ function validateName(name, message, type, isTargetNeededToBeCheck){
         message.push('Name must to contain characters');
         return false;
     }
-    if (name.includes('.')){
+    if (name.includes('.') || name.includes('/')){
         message.push('Name cannot contain special characters');
         return false;
     }
@@ -595,6 +595,14 @@ function validateDelete(message){
     return true;
 }
 
+function isDirectory() {
+    let file = fileSystem.getFileById(targetId);
+    if (file.type === 'directory'){
+        return true;
+    }
+    return false;
+}
+
 
 /* Prompts:  */
 
@@ -606,13 +614,18 @@ function createPromptNewDirectory(){
     setUpNewPrompt(newPrompt, 'New directory name:',
         fileSystem.getFreeNewName(targetId, 'new folder', 'directory'), 'Create', input, confirm);
     confirm.click(function () {
-        let message = [];
-        if (validateName(input.val(),message, 'directory')){
-            closeObject([newPrompt], 1);
-            createNewDirectory(input.val());
+        if (isDirectory()){
+            let message = [];
+            if (validateName(input.val(),message, 'directory')){
+                closeObject([newPrompt], 1);
+                createNewDirectory(input.val());
+            } else {
+                createAlertMessage(message.pop());
+            }
         } else {
-            createAlertMessage(message.pop());
+            createAlertMessage('You cannot create new directory in file');
         }
+
     });
 }
 
@@ -624,13 +637,18 @@ function createPromptNewTextFile(){
     setUpNewPrompt(newPrompt, 'New txt file name:',
         fileSystem.getFreeNewName(targetId, 'new file', 'txt'), 'Create', input, confirm);
     confirm.click(function () {
-        let message = [];
-        if (validateName(input.val(),message, 'txt')){
-            closeObject([newPrompt], 1);
-            createNewFile(input.val(), 'txt');
+        if (isDirectory()){
+            let message = [];
+            if (validateName(input.val(),message, 'txt')){
+                closeObject([newPrompt], 1);
+                createNewFile(input.val(), 'txt');
+            } else {
+                createAlertMessage(message.pop());
+            }
         } else {
-            createAlertMessage(message.pop());
+            createAlertMessage('You cannot create new file in file');
         }
+
     });
 }
 
